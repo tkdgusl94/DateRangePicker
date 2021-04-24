@@ -11,15 +11,11 @@ internal class DateRangePickerAdapter: RecyclerView.Adapter<DateRangePickerAdapt
 
     private val items = mutableListOf<Calendar>()
 
-    init {
-        val calendar = Calendar.getInstance()
+    fun setItems(items: List<Calendar>) {
+        this.items.clear()
 
-        for (i in 1..100) {
-            val cal = calendar.clone() as Calendar
-            cal.add(Calendar.MONTH, i)
-
-            items.add(cal)
-        }
+        this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LvViewHolder {
