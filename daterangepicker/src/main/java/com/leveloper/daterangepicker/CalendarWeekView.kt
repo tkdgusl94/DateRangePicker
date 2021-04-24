@@ -6,7 +6,6 @@ import android.view.ContextThemeWrapper
 import android.widget.LinearLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
-import androidx.core.view.children
 import java.util.*
 
 class CalendarWeekView @JvmOverloads constructor(
@@ -30,12 +29,12 @@ class CalendarWeekView @JvmOverloads constructor(
     }
 
     @Throws
-    fun setWeek(weekList: List<Calendar?>) {
+    fun setWeek(weekList: Array<String>) {
         if (weekList.size != Calendar.DAY_OF_WEEK)
             throw Exception("A week must be seven days.")
 
         for (i in 0 until childCount) {
-            val date = weekList[i]?.get(Calendar.DAY_OF_MONTH)?.toString() ?: ""
+            val date = weekList[i]
             (getChildAt(i) as CalendarCellView).setDate(date)
         }
     }

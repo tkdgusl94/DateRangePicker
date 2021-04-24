@@ -2,6 +2,7 @@ package com.leveloper.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.leveloper.daterangepicker.CalendarMonthView
 import com.leveloper.daterangepicker.CalendarWeekView
 import java.util.*
 
@@ -14,15 +15,7 @@ class MainActivity : AppCompatActivity() {
             timeInMillis = 0
         }
 
-        findViewById<CalendarWeekView>(R.id.cwv).setWeek(
-            listOf(
-                null,
-                null,
-                null,
-                calendar,
-                null,
-                null
-            )
-        )
+//        calendar.add(Calendar.MONTH, 4)
+        findViewById<CalendarMonthView>(R.id.cmv).setMonth(calendar)
     }
 }
