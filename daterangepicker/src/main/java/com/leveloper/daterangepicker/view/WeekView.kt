@@ -6,9 +6,10 @@ import android.view.ContextThemeWrapper
 import android.widget.LinearLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
+import com.leveloper.daterangepicker.data.CellDescriptor
 import java.util.*
 
-class CalendarWeekView @JvmOverloads constructor(
+class WeekView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
@@ -19,11 +20,7 @@ class CalendarWeekView @JvmOverloads constructor(
         orientation = HORIZONTAL
 
         for (i in 0 until Calendar.DAY_OF_WEEK) {
-            val cell = CalendarCellView(
-                ContextThemeWrapper(context, defStyleRes),
-                attrs,
-                defStyleAttr
-            )
+            val cell = CellView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr)
 
             val params = LayoutParams(0, LayoutParams.MATCH_PARENT)
             params.weight = 1f
@@ -32,12 +29,12 @@ class CalendarWeekView @JvmOverloads constructor(
         }
     }
 
-    fun setWeek(weekList: Array<String>) {
+    fun init(weekList: Array<CellDescriptor>, listener: MonthView.ItemClickListener?) {
         if (weekList.size != Calendar.DAY_OF_WEEK) throw Exception("A week must be seven days.")
 
         for (i in 0 until childCount) {
             val date = weekList[i]
-            (getChildAt(i) as CalendarCellView).setDate(date)
+            (getChildAt(i) as CellView).init(date, listener)
         }
     }
 }

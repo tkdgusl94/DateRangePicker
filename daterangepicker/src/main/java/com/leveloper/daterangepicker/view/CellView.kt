@@ -7,20 +7,26 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.ContextThemeWrapper
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
+import com.leveloper.daterangepicker.data.CellDescriptor
 import com.leveloper.daterangepicker.data.RangeState
+import com.leveloper.daterangepicker.ext.dayOfMonth
+import java.util.*
 import kotlin.math.min
 
-class CalendarCellView @JvmOverloads constructor(
+class CellView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
     @StyleRes defStyleRes: Int = 0
-): FrameLayout(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr) {
+): FrameLayout(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr), View.OnClickListener {
+
+    private var itemClickLister: MonthView.ItemClickListener? = null
 
     private val dateTextView: TextView
 
@@ -32,6 +38,7 @@ class CalendarCellView @JvmOverloads constructor(
 
     init {
         setWillNotDraw(false)
+        setOnClickListener(this)
 
         dateTextView = TextView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr)
 
@@ -64,7 +71,16 @@ class CalendarCellView @JvmOverloads constructor(
         }
     }
 
-    fun setDate(date: String) {
-        dateTextView.text = date
+    fun init(cellDesc: CellDescriptor, listener: MonthView.ItemClickListener?) {
+        dateTextView.text = cellDesc.date?.dayOfMonth?.toString()
+        itemClickLister = listener
+
+        tag = cellDesc
+    }
+
+    override fun onClick(v: View?) {
+        println("CellView onClick")
+        val cellDesc = tag as CellDescriptor
+        itemClickLister?.onItemClick(cellDesc)
     }
 }

@@ -10,7 +10,12 @@ import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.leveloper.daterangepicker.view.CalendarMonthView
+import com.leveloper.daterangepicker.data.CellDescriptor
+import com.leveloper.daterangepicker.data.MonthDescriptor
+import com.leveloper.daterangepicker.ext.month
+import com.leveloper.daterangepicker.ext.year
+import com.leveloper.daterangepicker.view.MonthView
+import java.time.Month
 import java.util.*
 
 class DateRangePicker @JvmOverloads constructor(
@@ -20,8 +25,9 @@ class DateRangePicker @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ): RecyclerView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr) {
 
-    private var selectedStart = Calendar.getInstance()
-    private var selectedEnd = Calendar.getInstance()
+    private val selectedCells = mutableListOf<CellDescriptor>()
+
+    private val listener = CellClickedListener()
 
     init {
         adapter = DateRangePickerAdapter()
@@ -33,56 +39,58 @@ class DateRangePicker @JvmOverloads constructor(
             adapter = DateRangePickerAdapter()
         }
 
-        val months = mutableListOf<Calendar>()
+        val months = mutableListOf<MonthDescriptor>()
 
         val calendar = start.clone() as Calendar
         while (true) {
-            months.add(calendar.clone() as Calendar)
-            calendar.add(Calendar.MONTH, 1)
+            months.add(MonthDescriptor(calendar.clone() as Calendar))
+            calendar.month += 1
 
-            if (end.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && end.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
+            if (end.year == calendar.year && end.month == calendar.month) {
                 break
             }
         }
 
         (adapter as DateRangePickerAdapter).setItems(months)
+
         return this
     }
 
-    private fun notify2() {
-        (adapter as DateRangePickerAdapter).notify2()
-    }
-
+    /**
+     * Adapter
+     */
     private inner class DateRangePickerAdapter: RecyclerView.Adapter<DateRangePickerAdapter.ViewHolder>() {
 
         private val inflater = LayoutInflater.from(context)
 
-        private val items = mutableListOf<Calendar>()
+        private val items = mutableListOf<MonthDescriptor>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = CalendarMonthView.create(parent, inflater)
+            val view = MonthView.create(parent, inflater, listener)
             return ViewHolder(view)
         }
 
         override fun getItemCount() = items.size
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val view = holder.itemView as CalendarMonthView
+            val view = holder.itemView as MonthView
 
+            println("!!!!! ${items[position].calendar.year}, ${items[position].calendar.month}")
             view.init(items[position])
         }
 
-        fun setItems(items: List<Calendar>) {
+        fun setItems(items: List<MonthDescriptor>) {
             this.items.clear()
 
             this.items.addAll(items)
             notifyDataSetChanged()
         }
 
-        fun notify2() {
-            notifyDataSetChanged()
-        }
-
         inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    }
+
+    private class CellClickedListener: MonthView.ItemClickListener {
+        override fun onItemClick(cell: CellDescriptor) {
+        }
     }
 }
