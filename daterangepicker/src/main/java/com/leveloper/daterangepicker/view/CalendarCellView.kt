@@ -1,4 +1,4 @@
-package com.leveloper.daterangepicker
+package com.leveloper.daterangepicker.view
 
 import android.content.Context
 import android.graphics.Canvas
@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
+import com.leveloper.daterangepicker.data.RangeState
 import kotlin.math.min
 
 class CalendarCellView @JvmOverloads constructor(
@@ -32,9 +33,7 @@ class CalendarCellView @JvmOverloads constructor(
     init {
         setWillNotDraw(false)
 
-        dateTextView = TextView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr).apply {
-            text = "30"
-        }
+        dateTextView = TextView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr)
 
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
             gravity = Gravity.CENTER

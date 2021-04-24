@@ -2,8 +2,6 @@ package com.leveloper.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.leveloper.daterangepicker.CalendarMonthView
-import com.leveloper.daterangepicker.CalendarWeekView
 import com.leveloper.daterangepicker.DateRangePicker
 import java.util.*
 

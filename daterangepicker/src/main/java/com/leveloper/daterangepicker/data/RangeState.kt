@@ -1,4 +1,4 @@
-package com.leveloper.daterangepicker
+package com.leveloper.daterangepicker.data
 
 enum class RangeState {
     NONE, ONE, FIRST, MIDDLE, LAST;
