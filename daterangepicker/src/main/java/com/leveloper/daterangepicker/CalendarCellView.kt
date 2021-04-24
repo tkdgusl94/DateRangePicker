@@ -21,7 +21,9 @@ class CalendarCellView @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ): FrameLayout(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr) {
 
-    private var state: RangeState = RangeState.LAST
+    private val dateTextView: TextView
+
+    private var state: RangeState = RangeState.ONE
 
     private var pointPaint: Paint = Paint().apply {
         color = Color.YELLOW
@@ -30,14 +32,14 @@ class CalendarCellView @JvmOverloads constructor(
     init {
         setWillNotDraw(false)
 
-        val date = TextView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr).apply {
+        dateTextView = TextView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr).apply {
             text = "30"
         }
 
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
             gravity = Gravity.CENTER
         }
-        addView(date, params)
+        addView(dateTextView, params)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -61,5 +63,9 @@ class CalendarCellView @JvmOverloads constructor(
         if (RangeState.isDrawRightRect(state)) {
             canvas.drawRect(centerX, centerY - radius, width.toFloat(), centerY + radius, pointPaint)
         }
+    }
+
+    fun setDate(date: String) {
+        dateTextView.text = date
     }
 }
