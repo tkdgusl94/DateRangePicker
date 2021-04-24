@@ -27,6 +27,7 @@ class CellView @JvmOverloads constructor(
 ): FrameLayout(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr), View.OnClickListener {
 
     private var itemClickLister: MonthView.ItemClickListener? = null
+    private var desc: CellDescriptor = CellDescriptor.EMPTY
 
     private val dateTextView: TextView
 
@@ -51,7 +52,7 @@ class CellView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas ?: return
+        if (canvas == null || desc.isEmpty) return
 
         val centerX = (width / 2).toFloat()
         val centerY = (height / 2).toFloat()
@@ -75,12 +76,10 @@ class CellView @JvmOverloads constructor(
         dateTextView.text = cellDesc.date?.dayOfMonth?.toString()
         itemClickLister = listener
 
-        tag = cellDesc
+        desc = cellDesc
     }
 
     override fun onClick(v: View?) {
-        println("CellView onClick")
-        val cellDesc = tag as CellDescriptor
-        itemClickLister?.onItemClick(cellDesc)
+        itemClickLister?.onItemClick(desc)
     }
 }

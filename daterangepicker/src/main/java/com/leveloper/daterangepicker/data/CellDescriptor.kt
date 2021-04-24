@@ -4,7 +4,8 @@ import java.util.*
 
 data class CellDescriptor(
     val date: Calendar? = null,
-    val isEmpty: Boolean = false
+    val isEmpty: Boolean = false,
+    var state: RangeState = RangeState.NONE
 ) {
 
     companion object {

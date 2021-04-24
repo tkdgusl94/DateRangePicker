@@ -75,7 +75,6 @@ class DateRangePicker @JvmOverloads constructor(
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val view = holder.itemView as MonthView
 
-            println("!!!!! ${items[position].calendar.year}, ${items[position].calendar.month}")
             view.init(items[position])
         }
 
@@ -91,6 +90,7 @@ class DateRangePicker @JvmOverloads constructor(
 
     private class CellClickedListener: MonthView.ItemClickListener {
         override fun onItemClick(cell: CellDescriptor) {
+
         }
     }
 }

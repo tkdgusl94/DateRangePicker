@@ -18,6 +18,7 @@ import com.leveloper.daterangepicker.ext.dayOfMonth
 import com.leveloper.daterangepicker.ext.dayOfWeek
 import com.leveloper.daterangepicker.ext.month
 import com.leveloper.daterangepicker.ext.year
+import java.lang.Exception
 import java.util.*
 
 class MonthView @JvmOverloads constructor(
@@ -53,44 +54,21 @@ class MonthView @JvmOverloads constructor(
     }
 
     fun init(monthDesc: MonthDescriptor) {
-        val calendar = monthDesc.calendar.clone() as Calendar
+        title.text = monthDesc.month.toString()
 
-        title.text = (calendar.month + 1).toString()
+        children
+            .filter { it is WeekView }
+            .map { it as WeekView }
+            .forEachIndexed { i, view ->
+                try {
+                    val week = monthDesc.weeks[i]
 
-        calendar.dayOfMonth = 1
-
-        var index = 1
-        val month = calendar.month
-
-        var week = Array(Calendar.DAY_OF_WEEK) { CellDescriptor.EMPTY }
-
-        fun setWeek(week: Array<CellDescriptor>) {
-            val weekView = getChildAt(index++) as WeekView
-            weekView.init(week, listener)
-            weekView.visibility = View.VISIBLE
-        }
-
-        while (true) {
-            val dayOfWeek = calendar.dayOfWeek
-
-            week[dayOfWeek - 1] = CellDescriptor(calendar.clone() as Calendar)
-            calendar.dayOfMonth += 1
-
-            // next month
-            if (month != calendar.month) {
-                setWeek(week)
-                break
+                    view.init(week, listener)
+                    view.visibility = View.VISIBLE
+                } catch (e: IndexOutOfBoundsException) {
+                    view.visibility = View.GONE
+                }
             }
-
-            if (calendar.dayOfWeek == Calendar.SUNDAY) {
-                setWeek(week)
-                week = Array(Calendar.DAY_OF_WEEK) { CellDescriptor.EMPTY }
-            }
-        }
-
-        for (i in index until childCount) {
-            getChildAt(i).visibility = View.GONE
-        }
     }
 
     interface ItemClickListener {
