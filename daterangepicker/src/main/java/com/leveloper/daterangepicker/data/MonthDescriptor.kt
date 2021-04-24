@@ -3,35 +3,37 @@ package com.leveloper.daterangepicker.data
 import com.leveloper.daterangepicker.ext.dayOfMonth
 import com.leveloper.daterangepicker.ext.dayOfWeek
 import com.leveloper.daterangepicker.ext.month
+import com.leveloper.daterangepicker.ext.year
 import java.util.*
 
-data class MonthDescriptor(
+internal data class MonthDescriptor(
     val calendar: Calendar
 ) {
+    val key: String
+        get() = String.format("%d-%d", calendar.year, calendar.month)
+
     val month: Int
         get() = calendar.month + 1
 
     val weeks: List<Array<CellDescriptor>> by lazy {
         val result = mutableListOf<Array<CellDescriptor>>()
 
-        val month = calendar.month
-
         var week = Array(Calendar.DAY_OF_WEEK) { CellDescriptor.EMPTY }
 
-        val cal = calendar.clone() as Calendar
+        val temp = calendar.clone() as Calendar
         while (true) {
-            val dayOfWeek = cal.dayOfWeek
+            val dayOfWeek = temp.dayOfWeek
 
-            week[dayOfWeek - 1] = CellDescriptor(cal.clone() as Calendar)
-            cal.dayOfMonth += 1
+            week[dayOfWeek - 1] = CellDescriptor(temp.clone() as Calendar)
+            temp.dayOfMonth += 1
 
             // next month
-            if (month != cal.month) {
+            if (calendar.month != temp.month) {
                 result.add(week)
                 break
             }
 
-            if (cal.dayOfWeek == Calendar.SUNDAY) {
+            if (temp.dayOfWeek == Calendar.SUNDAY) {
                 result.add(week)
                 week = Array(Calendar.DAY_OF_WEEK) { CellDescriptor.EMPTY }
             }

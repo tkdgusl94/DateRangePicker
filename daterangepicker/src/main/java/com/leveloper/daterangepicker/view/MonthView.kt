@@ -21,7 +21,7 @@ import com.leveloper.daterangepicker.ext.year
 import java.lang.Exception
 import java.util.*
 
-class MonthView @JvmOverloads constructor(
+internal class MonthView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,

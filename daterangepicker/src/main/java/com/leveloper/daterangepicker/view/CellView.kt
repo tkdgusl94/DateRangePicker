@@ -19,7 +19,7 @@ import com.leveloper.daterangepicker.ext.dayOfMonth
 import java.util.*
 import kotlin.math.min
 
-class CellView @JvmOverloads constructor(
+internal class CellView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
@@ -30,8 +30,6 @@ class CellView @JvmOverloads constructor(
     private var desc: CellDescriptor = CellDescriptor.EMPTY
 
     private val dateTextView: TextView
-
-    private var state: RangeState = RangeState.ONE
 
     private var pointPaint: Paint = Paint().apply {
         color = Color.YELLOW
@@ -52,21 +50,21 @@ class CellView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        if (canvas == null || desc.isEmpty) return
+        if (canvas == null) return
 
         val centerX = (width / 2).toFloat()
         val centerY = (height / 2).toFloat()
 
         val radius = min(centerX, centerY)
 
+        val state = desc.state
+
         if (RangeState.isDrawCircle(state)) {
             canvas.drawCircle(centerX, centerY, radius, pointPaint)
         }
-
         if (RangeState.isDrawLeftRect(state)) {
             canvas.drawRect(0f, centerY - radius, centerX, centerY + radius, pointPaint)
         }
-
         if (RangeState.isDrawRightRect(state)) {
             canvas.drawRect(centerX, centerY - radius, width.toFloat(), centerY + radius, pointPaint)
         }

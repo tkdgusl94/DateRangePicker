@@ -1,6 +1,6 @@
 package com.leveloper.daterangepicker.data
 
-enum class RangeState {
+internal enum class RangeState {
     NONE, ONE, FIRST, MIDDLE, LAST;
 
     companion object {

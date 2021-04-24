@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.leveloper.daterangepicker.data.CellDescriptor
 import com.leveloper.daterangepicker.data.MonthDescriptor
+import com.leveloper.daterangepicker.data.RangeState
 import com.leveloper.daterangepicker.ext.month
 import com.leveloper.daterangepicker.ext.year
 import com.leveloper.daterangepicker.view.MonthView
@@ -25,7 +26,11 @@ class DateRangePicker @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ): RecyclerView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr) {
 
+    private var start: Calendar? = null
+    private var end: Calendar? = null
+
     private val selectedCells = mutableListOf<CellDescriptor>()
+    private val selectedMap = mutableMapOf<String, MonthDescriptor>()
 
     private val listener = CellClickedListener()
 
@@ -73,9 +78,7 @@ class DateRangePicker @JvmOverloads constructor(
         override fun getItemCount() = items.size
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val view = holder.itemView as MonthView
-
-            view.init(items[position])
+            (holder.itemView as MonthView).init(items[position])
         }
 
         fun setItems(items: List<MonthDescriptor>) {
@@ -88,9 +91,11 @@ class DateRangePicker @JvmOverloads constructor(
         inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     }
 
-    private class CellClickedListener: MonthView.ItemClickListener {
+    private inner class CellClickedListener: MonthView.ItemClickListener {
         override fun onItemClick(cell: CellDescriptor) {
+            cell.state = RangeState.ONE
 
+            adapter?.notifyDataSetChanged()
         }
     }
 }

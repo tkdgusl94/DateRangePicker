@@ -9,7 +9,7 @@ import androidx.annotation.StyleRes
 import com.leveloper.daterangepicker.data.CellDescriptor
 import java.util.*
 
-class WeekView @JvmOverloads constructor(
+internal class WeekView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
