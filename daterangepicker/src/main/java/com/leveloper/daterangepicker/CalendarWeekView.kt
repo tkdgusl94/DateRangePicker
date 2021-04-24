@@ -30,8 +30,7 @@ class CalendarWeekView @JvmOverloads constructor(
 
     @Throws
     fun setWeek(weekList: Array<String>) {
-        if (weekList.size != Calendar.DAY_OF_WEEK)
-            throw Exception("A week must be seven days.")
+        if (weekList.size != Calendar.DAY_OF_WEEK) throw Exception("A week must be seven days.")
 
         for (i in 0 until childCount) {
             val date = weekList[i]

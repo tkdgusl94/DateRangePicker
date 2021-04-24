@@ -16,6 +16,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        calendar.add(Calendar.MONTH, 4)
-        findViewById<CalendarMonthView>(R.id.cmv).setMonth(calendar)
+//        findViewById<CalendarMonthView>(R.id.cmv).setMonth(calendar)
     }
 }

@@ -35,7 +35,7 @@ class CalendarMonthView @JvmOverloads constructor(
         var index = 0
         val month = calendar.get(Calendar.MONTH)
 
-        var week = Array(7) { "" }
+        var week = Array(Calendar.DAY_OF_WEEK) { "" }
 
         fun setWeek(week: Array<String>) {
             val weekView = getChildAt(index++) as CalendarWeekView
@@ -57,7 +57,7 @@ class CalendarMonthView @JvmOverloads constructor(
 
             if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                 setWeek(week)
-                week = Array(7) { "" }
+                week = Array(Calendar.DAY_OF_WEEK) { "" }
             }
         }
 

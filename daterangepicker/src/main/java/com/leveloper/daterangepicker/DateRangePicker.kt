@@ -18,6 +18,5 @@ class DateRangePicker @JvmOverloads constructor(
     init {
         adapter = DateRangePickerAdapter()
         layoutManager = LinearLayoutManager(context, attrs, defStyleAttr, defStyleRes)
-
     }
 }
