@@ -1,0 +1,3 @@
+include ':daterangepicker'
+include ':app'
+rootProject.name = "Sample"
