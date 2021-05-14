@@ -78,6 +78,6 @@ internal class CellView @JvmOverloads constructor(
     }
 
     override fun onClick(v: View?) {
-        itemClickLister?.onItemClick(desc)
+        if (desc.clickable) itemClickLister?.onItemClick(desc)
     }
 }

@@ -10,10 +10,7 @@ internal data class MonthDescriptor(
     val calendar: Calendar
 ) {
     val key: String
-        get() = String.format("%d-%d", calendar.year, calendar.month)
-
-    val month: Int
-        get() = calendar.month + 1
+        get() = String.format("%d-%d", calendar.year, calendar.month + 1)
 
     val weeks: List<Array<CellDescriptor>> by lazy {
         val result = mutableListOf<Array<CellDescriptor>>()
@@ -40,5 +37,20 @@ internal data class MonthDescriptor(
         }
 
         result
+    }
+
+    fun updateRangeState(start: Calendar?, end: Calendar?) {
+        weeks.forEach { week ->
+            week.forEach { cell ->
+                if (cell.date != null) {
+                    if (start!!.timeInMillis <= cell.date.timeInMillis && cell.date.timeInMillis <= end?.timeInMillis ?: start.timeInMillis) {
+                        cell.state = RangeState.MIDDLE
+                    }
+                    else {
+                        cell.state = RangeState.NONE
+                    }
+                }
+            }
+        }
     }
 }

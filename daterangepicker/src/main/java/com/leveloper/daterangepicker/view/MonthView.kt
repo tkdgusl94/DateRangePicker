@@ -54,9 +54,9 @@ internal class MonthView @JvmOverloads constructor(
     }
 
     fun init(monthDesc: MonthDescriptor) {
-        title.text = monthDesc.month.toString()
+        title.text = monthDesc.key
 
-        children
+        children.asSequence()
             .filter { it is WeekView }
             .map { it as WeekView }
             .forEachIndexed { i, view ->

@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.leveloper.daterangepicker.data.CellDescriptor
 import com.leveloper.daterangepicker.data.MonthDescriptor
-import com.leveloper.daterangepicker.data.RangeState
+import com.leveloper.daterangepicker.ext.dayOfMonth
 import com.leveloper.daterangepicker.ext.month
 import com.leveloper.daterangepicker.ext.year
 import com.leveloper.daterangepicker.view.MonthView
-import java.time.Month
 import java.util.*
 
 class DateRangePicker @JvmOverloads constructor(
@@ -26,13 +25,7 @@ class DateRangePicker @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ): RecyclerView(ContextThemeWrapper(context, defStyleRes), attrs, defStyleAttr) {
 
-    private var start: Calendar? = null
-    private var end: Calendar? = null
-
-    private val selectedCells = mutableListOf<CellDescriptor>()
-    private val selectedMap = mutableMapOf<String, MonthDescriptor>()
-
-    private val listener = CellClickedListener()
+    private var rangeChangedLister: RangeChangedListener? = null
 
     init {
         adapter = DateRangePickerAdapter()
@@ -47,6 +40,7 @@ class DateRangePicker @JvmOverloads constructor(
         val months = mutableListOf<MonthDescriptor>()
 
         val calendar = start.clone() as Calendar
+        calendar.dayOfMonth = 1
         while (true) {
             months.add(MonthDescriptor(calendar.clone() as Calendar))
             calendar.month += 1
@@ -61,6 +55,14 @@ class DateRangePicker @JvmOverloads constructor(
         return this
     }
 
+    fun scrollToDate(date: Calendar) {
+        // TODO : 설정한 날짜로 scrollTo
+    }
+
+    fun setRangeChangedListener(listener: RangeChangedListener) {
+        rangeChangedLister = listener
+    }
+
     /**
      * Adapter
      */
@@ -70,8 +72,40 @@ class DateRangePicker @JvmOverloads constructor(
 
         private val items = mutableListOf<MonthDescriptor>()
 
+        private var start: Calendar? = null
+        private var end: Calendar? = null
+
+        private val cellClickedListener = object: MonthView.ItemClickListener {
+            override fun onItemClick(cell: CellDescriptor) {
+                when {
+                    start == null -> {
+                        start = cell.date
+                    }
+                    cell.date!!.timeInMillis < start!!.timeInMillis -> {
+                        start = cell.date
+                        end = null
+                    }
+                    end == null -> {
+                        end = cell.date
+                    }
+                    else -> {
+                        start = cell.date
+                        end = null
+                    }
+                }
+
+                items.forEach {
+                    it.updateRangeState(start, end)
+                }
+
+                notifyDataSetChanged()
+
+//                rangeChangedLister?.onChanged(start!!, end!!)
+            }
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = MonthView.create(parent, inflater, listener)
+            val view = MonthView.create(parent, inflater, cellClickedListener)
             return ViewHolder(view)
         }
 
@@ -91,11 +125,7 @@ class DateRangePicker @JvmOverloads constructor(
         inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
     }
 
-    private inner class CellClickedListener: MonthView.ItemClickListener {
-        override fun onItemClick(cell: CellDescriptor) {
-            cell.state = RangeState.ONE
-
-            adapter?.notifyDataSetChanged()
-        }
+    interface RangeChangedListener {
+        fun onChanged(start: Calendar, end: Calendar)
     }
 }
