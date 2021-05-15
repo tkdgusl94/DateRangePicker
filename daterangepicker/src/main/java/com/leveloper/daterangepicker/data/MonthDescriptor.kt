@@ -1,5 +1,6 @@
 package com.leveloper.daterangepicker.data
 
+import com.leveloper.daterangepicker.ext.*
 import com.leveloper.daterangepicker.ext.dayOfMonth
 import com.leveloper.daterangepicker.ext.dayOfWeek
 import com.leveloper.daterangepicker.ext.month
@@ -43,11 +44,19 @@ internal data class MonthDescriptor(
         weeks.forEach { week ->
             week.forEach { cell ->
                 if (cell.date != null) {
-                    if (start!!.timeInMillis <= cell.date.timeInMillis && cell.date.timeInMillis <= end?.timeInMillis ?: start.timeInMillis) {
-                        cell.state = RangeState.MIDDLE
-                    }
-                    else {
-                        cell.state = RangeState.NONE
+                    cell.state = when {
+                        start!!.isSameDay(cell.date) -> {
+                            if (end == null) RangeState.ONE else RangeState.FIRST
+                        }
+                        end?.isSameDay(cell.date) == true -> {
+                            RangeState.LAST
+                        }
+                        start.timeInMillis <= cell.date.timeInMillis && cell.date.timeInMillis <= end?.timeInMillis ?: start.timeInMillis -> {
+                            RangeState.MIDDLE
+                        }
+                        else -> {
+                            RangeState.NONE
+                        }
                     }
                 }
             }

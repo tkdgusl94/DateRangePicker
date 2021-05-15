@@ -16,3 +16,9 @@ internal var Calendar.dayOfMonth: Int
 
 internal val Calendar.dayOfWeek: Int
     get() = get(Calendar.DAY_OF_WEEK)
+
+internal fun Calendar.isSameDay(other: Calendar): Boolean {
+    return this.year == other.year
+            && this.month == other.month
+            && this.dayOfMonth == other.dayOfMonth
+}

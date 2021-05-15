@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val start = Calendar.getInstance().apply { timeInMillis = 166666669066 }
+        val start = Calendar.getInstance().apply { timeInMillis = 0 }
         val end = Calendar.getInstance()
 
         val dateRangePicker = findViewById<DateRangePicker>(R.id.drp)
