@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.leveloper.daterangepicker.data.CellDescriptor
 import com.leveloper.daterangepicker.data.MonthDescriptor
 import com.leveloper.daterangepicker.ext.dayOfMonth
+import com.leveloper.daterangepicker.ext.isSameDay
 import com.leveloper.daterangepicker.ext.month
 import com.leveloper.daterangepicker.ext.year
 import com.leveloper.daterangepicker.view.MonthView
@@ -86,7 +87,10 @@ class DateRangePicker @JvmOverloads constructor(
                         end = null
                     }
                     end == null -> {
-                        end = cell.date
+                        if (cell.date.isSameDay(start!!))
+                            start = cell.date
+                        else
+                            end = cell.date
                     }
                     else -> {
                         start = cell.date
